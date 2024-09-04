@@ -7,11 +7,12 @@ import java.time.LocalDateTime;
 @Entity(name = "planeta")
 public class Planet {
 
-    private static final int DEFAULT_LENGTH_VALUE = 5;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "nome", nullable = false, length = 100, unique = true)
+    private String name;
 
     @Column(name = "largura")
     private Integer width;
@@ -44,15 +45,27 @@ public class Planet {
         this.height = height;
     }
 
-    public boolean isValidPlanetExtension() {
-        return isValidLength(this.width) && isValidLength(this.height);
+    public Integer getId() {
+        return id;
     }
 
-    private boolean isValidLength(Integer length) {
-        return DEFAULT_LENGTH_VALUE == length;
+    public String getName() {
+        return name;
     }
 
-    private boolean isValidMaximumOccupancy() {
-        return (this.height * this.width) <= this.maximumOccupancy;
+    public Integer getWidth() {
+        return width;
+    }
+
+    public Integer getHeight() {
+        return height;
+    }
+
+    public Integer getMaximumOccupancy() {
+        return maximumOccupancy;
+    }
+
+    public boolean isValidMaximumOccupancy(Integer newMaximumOccupancy) {
+        return (this.height * this.width) <= newMaximumOccupancy;
     }
 }

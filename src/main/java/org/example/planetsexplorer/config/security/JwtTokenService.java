@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 @Service
 public class JwtTokenService {
@@ -41,6 +42,19 @@ public class JwtTokenService {
                     .build()
                     .verify(token)
                     .getSubject();
+        } catch (JWTVerificationException exception){
+            throw new JWTVerificationException("Token inválido ou expirado.");
+        }
+    }
+
+    public Date getExpiresAtFromToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secretKey);
+            return JWT.require(algorithm)
+                    .withIssuer(ISSUER)
+                    .build()
+                    .verify(token)
+                    .getExpiresAt();
         } catch (JWTVerificationException exception){
             throw new JWTVerificationException("Token inválido ou expirado.");
         }

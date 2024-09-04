@@ -2,8 +2,11 @@ package org.example.planetsexplorer.domain.model;
 
 import jakarta.persistence.*;
 import org.example.planetsexplorer.shared.enums.SpaceProbeDirectionEnum;
+import org.example.planetsexplorer.shared.exception.BusinessException;
 
 import java.time.LocalDateTime;
+
+import static org.example.planetsexplorer.shared.enums.SpaceProbeDirectionEnum.*;
 
 @Entity(name = "sonda")
 public class SpaceProbe {
@@ -53,16 +56,84 @@ public class SpaceProbe {
         this.actualPlanet = actualPlanet;
     }
 
-    public boolean areValidCoordinates() {
-        return isValidPositionValue(this.x) && isValidPositionValue(this.y);
+    public Integer getId() {
+        return id;
     }
 
-    private boolean isValidPositionValue(Integer position) {
-        return position >= 0 && position <= 4;
+    public Integer getDirection() {
+        return direction;
     }
 
-    public boolean isValidDirection(Integer direction) {
-        return SpaceProbeDirectionEnum.checkIfDirectionExists(direction);
+    public Planet getActualPlanet() {
+        return actualPlanet;
     }
 
+    public Integer getActualPlanetId() {
+        return actualPlanet.getId();
+    }
+
+    public String getActualPlanetName() {
+        return actualPlanet.getName();
+    }
+
+    public Integer getOwnerId() {
+        return owner.getId();
+    }
+
+    public Integer getX() {
+        return x;
+    }
+
+    public Integer getY() {
+        return y;
+    }
+
+    public void validatePlanetMaximumOccupancy() {
+        boolean isValidMaximumOccupancy =
+                actualPlanet.isValidMaximumOccupancy(actualPlanet.getMaximumOccupancy() + 1);
+
+        if (!isValidMaximumOccupancy) {
+            throw new BusinessException("O planeta já está lotado.");
+        }
+    }
+
+    public void moveForward() {
+        SpaceProbeDirectionEnum currentDirection = fromId(getDirection());
+
+        switch (currentDirection) {
+            case NORTH:
+                y++;
+                break;
+            case EAST:
+                x++;
+                break;
+            case SOUTH:
+                y--;
+                break;
+            case WEST:
+                x--;
+                break;
+            default:
+                throw new BusinessException("O eixo de movimento deve ser X ou Y");
+        }
+    }
+
+    public void leftRotate() {
+        direction = SpaceProbeDirectionEnum.getNextDirection(getDirection(), "LEFT");
+    }
+
+    public void rightRotate() {
+        direction = SpaceProbeDirectionEnum.getNextDirection(getDirection(), "RIGHT");
+    }
+
+    public boolean coordinatesAreInsidePlanetBorders() {
+        return x >= 1 && y >= 1 && x <= actualPlanet.getWidth() && y <= actualPlanet.getHeight();
+    }
+
+    public void unlinkPlanet() {
+        x = null;
+        y = null;
+        direction = null;
+        actualPlanet = null;
+    }
 }

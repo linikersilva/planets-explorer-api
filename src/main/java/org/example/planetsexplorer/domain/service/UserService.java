@@ -1,5 +1,6 @@
 package org.example.planetsexplorer.domain.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.example.planetsexplorer.config.security.JwtTokenService;
 import org.example.planetsexplorer.config.security.UserDetailsImpl;
 import org.example.planetsexplorer.config.security.WebSecurityConfig;
@@ -14,6 +15,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -44,16 +48,29 @@ public class UserService {
         Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        return new RecoveryJwtTokenDto(jwtTokenService.generateToken(userDetails));
+        String token = jwtTokenService.generateToken(userDetails);
+        return new RecoveryJwtTokenDto(token,
+                                       jwtTokenService.getExpiresAtFromToken(token));
     }
 
     public void createUser(CreateUserDto createUserDto) {
         Role role = roleService.findRoleById(createUserDto.roleId());
 
+        User creator = userRepository.findById(createUserDto.creatorId())
+                .orElseThrow(() -> new EntityNotFoundException("Não foi encontrado nenhum usuário com o creatorId informado"));
+
         User newUser = new User(createUserDto.email(),
                                 securityConfiguration.passwordEncoder().encode(createUserDto.password()),
-                                role);
+                                role,
+                                creator,
+                                LocalDateTime.now(),
+                                LocalDateTime.now(),
+                                creator);
 
         userRepository.save(newUser);
+    }
+
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }

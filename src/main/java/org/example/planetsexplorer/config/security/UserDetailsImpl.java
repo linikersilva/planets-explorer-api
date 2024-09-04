@@ -12,7 +12,7 @@ public record UserDetailsImpl(User user) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getName().name()));
+        return Collections.singletonList(new SimpleGrantedAuthority(user.getRoleName()));
     }
 
     @Override

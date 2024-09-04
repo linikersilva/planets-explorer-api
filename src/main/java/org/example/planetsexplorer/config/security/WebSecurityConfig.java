@@ -31,7 +31,8 @@ public class WebSecurityConfig {
     };
 
     protected static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
-            "/users/test"
+            "/users/test",
+            "/space-probes/move"
     };
 
     protected static final String [] ENDPOINTS_CUSTOMER = {

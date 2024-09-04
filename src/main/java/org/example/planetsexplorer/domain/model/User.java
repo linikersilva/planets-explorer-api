@@ -1,6 +1,7 @@
 package org.example.planetsexplorer.domain.model;
 
 import jakarta.persistence.*;
+import org.example.planetsexplorer.shared.enums.RoleName;
 
 import java.time.LocalDateTime;
 
@@ -38,10 +39,24 @@ public class User {
     public User() {
     }
 
-    public User(String email, String password, Role role) {
+    public User(String email,
+                String password,
+                Role role,
+                User creator,
+                LocalDateTime createdAt,
+                LocalDateTime updatedAt,
+                User updater) {
         this.email = email;
         this.password = password;
         this.role = role;
+        this.creator = creator;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.updater = updater;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public String getEmail() {
@@ -52,7 +67,15 @@ public class User {
         return password;
     }
 
-    public Role getRole() {
-        return role;
+    public String getRoleName() {
+        return role.getName().name();
+    }
+
+    public boolean isOwnerOf(SpaceProbe spaceProbe) {
+        return this.id.equals(spaceProbe.getOwnerId());
+    }
+
+    public boolean hasRole(RoleName roleName) {
+        return this.role.getName().name().equals(roleName.name());
     }
 }
