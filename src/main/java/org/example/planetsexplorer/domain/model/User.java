@@ -85,6 +85,10 @@ public class User {
         return updatedAt;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -101,8 +105,16 @@ public class User {
         this.updaterId = updaterId;
     }
 
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public void setCreatorId(Integer creatorId) {
+        this.creatorId = creatorId;
     }
 
     public boolean isOwnerOf(SpaceProbe spaceProbe) {
