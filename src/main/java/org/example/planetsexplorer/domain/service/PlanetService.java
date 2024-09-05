@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.example.planetsexplorer.domain.model.Planet;
 import org.example.planetsexplorer.domain.model.User;
 import org.example.planetsexplorer.domain.repository.PlanetRepository;
+import org.example.planetsexplorer.domain.repository.projections.PlanetOccupiedPositionsProjection;
 import org.example.planetsexplorer.shared.dto.CreatePlanetDto;
 import org.example.planetsexplorer.shared.dto.PlanetResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -79,5 +81,15 @@ public class PlanetService {
                                      planet.getCreatedAt(),
                                      planet.getUpdatedAt(),
                                      updater.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Planet> findPlanetById(Integer id) {
+        return planetRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PlanetOccupiedPositionsProjection> findPlanetOccupiedPositions(Integer id) {
+        return planetRepository.findPlanetOccupiedPositions(id);
     }
 }

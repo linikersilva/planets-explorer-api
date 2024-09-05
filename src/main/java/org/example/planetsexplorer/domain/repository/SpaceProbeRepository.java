@@ -8,8 +8,12 @@ import java.util.Optional;
 
 @Repository
 public interface SpaceProbeRepository extends JpaRepository<SpaceProbe, Integer> {
-    Optional<SpaceProbe> findByActualPlanet_IdAndXAndYAndIdNot(Integer planetId,
-                                                               Integer x,
-                                                               Integer y,
-                                                               Integer currentSpaceProbeId);
+    Optional<SpaceProbe> findByCurrentPlanet_IdAndXAndYAndIdNot(Integer planetId,
+                                                                Integer x,
+                                                                Integer y,
+                                                                Integer currentSpaceProbeId);
+
+    Optional<SpaceProbe> findByCurrentPlanet_IdAndXAndY(Integer planetId,
+                                                        Integer x,
+                                                        Integer y);
 }

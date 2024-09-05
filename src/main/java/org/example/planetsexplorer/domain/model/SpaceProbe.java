@@ -26,7 +26,7 @@ public class SpaceProbe {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "planeta_fk")
-    private Planet actualPlanet;
+    private Planet currentPlanet;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_dono", nullable = false)
@@ -49,11 +49,18 @@ public class SpaceProbe {
     public SpaceProbe() {
     }
 
-    public SpaceProbe(Integer x, Integer y, Integer direction, Planet actualPlanet) {
+    public SpaceProbe(Integer x, Integer y, Integer direction, Planet currentPlanet,
+                      User owner, User creator, LocalDateTime createdAt,
+                      LocalDateTime updatedAt, User updater) {
         this.x = x;
         this.y = y;
         this.direction = direction;
-        this.actualPlanet = actualPlanet;
+        this.currentPlanet = currentPlanet;
+        this.owner = owner;
+        this.creator = creator;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.updater = updater;
     }
 
     public Integer getId() {
@@ -64,20 +71,24 @@ public class SpaceProbe {
         return direction;
     }
 
-    public Planet getActualPlanet() {
-        return actualPlanet;
+    public Planet getCurrentPlanet() {
+        return currentPlanet;
     }
 
-    public Integer getActualPlanetId() {
-        return actualPlanet.getId();
+    public Integer getCurrentPlanetId() {
+        return currentPlanet.getId();
     }
 
-    public String getActualPlanetName() {
-        return actualPlanet.getName();
+    public String getCurrentPlanetName() {
+        return currentPlanet.getName();
     }
 
     public Integer getOwnerId() {
         return owner.getId();
+    }
+
+    public Integer getCreatorId() {
+        return creator.getId();
     }
 
     public Integer getX() {
@@ -88,13 +99,44 @@ public class SpaceProbe {
         return y;
     }
 
-    public void validatePlanetMaximumOccupancy() {
-        boolean isValidMaximumOccupancy =
-                actualPlanet.isValidMaximumOccupancy(actualPlanet.getMaximumOccupancy() + 1);
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
-        if (!isValidMaximumOccupancy) {
-            throw new BusinessException("O planeta já está lotado.");
-        }
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public Integer getUpdaterId() {
+        return updater.getId();
+    }
+
+    public void setX(Integer x) {
+        this.x = x;
+    }
+
+    public void setY(Integer y) {
+        this.y = y;
+    }
+
+    public void setDirection(Integer direction) {
+        this.direction = direction;
+    }
+
+    public void setCurrentPlanet(Planet currentPlanet) {
+        this.currentPlanet = currentPlanet;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public void setUpdater(User updater) {
+        this.updater = updater;
     }
 
     public void moveForward() {
@@ -127,13 +169,13 @@ public class SpaceProbe {
     }
 
     public boolean coordinatesAreInsidePlanetBorders() {
-        return x >= 1 && y >= 1 && x <= actualPlanet.getWidth() && y <= actualPlanet.getHeight();
+        return x >= 1 && y >= 1 && x <= currentPlanet.getWidth() && y <= currentPlanet.getHeight();
     }
 
     public void unlinkPlanet() {
         x = null;
         y = null;
         direction = null;
-        actualPlanet = null;
+        currentPlanet = null;
     }
 }

@@ -30,14 +30,18 @@ public class WebSecurityConfig {
     };
 
     protected static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
-            "/space-probes/move"
+            "/space-probes",
+            "/space-probes/{id}",
+            "/space-probes/move",
+            "/space-probes/land/{id}"
     };
 
     protected static final String [] ENDPOINTS_WITH_ADMIN_ACCESS_LEVEL = {
             "/users",
             "/users/update/{id}",
             "/planets",
-            "/planets/update/{id}"
+            "/planets/update/{id}",
+            "/space-probes/update-owner/{id}"
     };
 
     @Bean

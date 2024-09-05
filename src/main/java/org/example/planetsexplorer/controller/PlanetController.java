@@ -1,8 +1,8 @@
 package org.example.planetsexplorer.controller;
 
 import org.example.planetsexplorer.domain.service.PlanetService;
-import org.example.planetsexplorer.shared.dto.BeanValidationCreationGroup;
-import org.example.planetsexplorer.shared.dto.BeanValidationUpdateGroup;
+import org.example.planetsexplorer.shared.beanvalidation.BeanValidationCreationGroup;
+import org.example.planetsexplorer.shared.beanvalidation.BeanValidationUpdateGroup;
 import org.example.planetsexplorer.shared.dto.CreatePlanetDto;
 import org.example.planetsexplorer.shared.dto.PlanetResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;

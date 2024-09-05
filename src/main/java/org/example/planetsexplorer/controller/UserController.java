@@ -2,6 +2,8 @@ package org.example.planetsexplorer.controller;
 
 import jakarta.validation.Valid;
 import org.example.planetsexplorer.domain.service.UserService;
+import org.example.planetsexplorer.shared.beanvalidation.BeanValidationCreationGroup;
+import org.example.planetsexplorer.shared.beanvalidation.BeanValidationUpdateGroup;
 import org.example.planetsexplorer.shared.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

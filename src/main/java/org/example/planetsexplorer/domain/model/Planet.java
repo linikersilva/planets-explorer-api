@@ -86,7 +86,7 @@ public class Planet {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.toUpperCase();
     }
 
     public void setWidth(Integer width) {
@@ -107,9 +107,5 @@ public class Planet {
 
     public void setUpdater(User updater) {
         this.updater = updater;
-    }
-
-    public boolean isValidMaximumOccupancy(Integer newMaximumOccupancy) {
-        return (this.height * this.width) <= newMaximumOccupancy;
     }
 }

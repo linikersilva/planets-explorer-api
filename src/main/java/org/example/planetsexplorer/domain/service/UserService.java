@@ -91,6 +91,12 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    @Transactional(readOnly = true)
+    public User findById(Integer id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Não foi encontrado nenhum usuário com o id informado"));
+    }
+
     @Transactional
     public UserResponseDto updateUser(Integer id, CreateUserDto createUserDto, String userDetails) {
         User user = userRepository.findById(id)

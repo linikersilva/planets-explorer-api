@@ -41,17 +41,17 @@ public enum SpaceProbeDirectionEnum {
         return rightRotation;
     }
 
-    public static Integer getNextDirection(Integer actualDirectionId, String rotation) {
-        checkIfDirectionExists(actualDirectionId);
+    public static Integer getNextDirection(Integer currentDirectionId, String rotation) {
+        checkIfDirectionExists(currentDirectionId);
 
         return Arrays.stream(SpaceProbeDirectionEnum.values())
-                .filter(enumDirection -> enumDirection.getId().equals(actualDirectionId))
+                .filter(enumDirection -> enumDirection.getId().equals(currentDirectionId))
                 .map(filteredEnum -> getRotationDirection(rotation, filteredEnum))
                 .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException("Não foi encontrada nenhuma direção com o id especificado"));
     }
 
-    private static void checkIfDirectionExists(Integer directionId) {
+    public static void checkIfDirectionExists(Integer directionId) {
         boolean exists = Arrays.stream(SpaceProbeDirectionEnum.values())
                 .anyMatch(enumDirection -> enumDirection.getId().equals(directionId));
 
