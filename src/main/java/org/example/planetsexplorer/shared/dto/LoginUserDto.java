@@ -1,4 +1,6 @@
 package org.example.planetsexplorer.shared.dto;
 
-public record LoginUserDto(String email,
-                           String password) {}
+import jakarta.validation.constraints.NotNull;
+
+public record LoginUserDto(@NotNull String email,
+                           @NotNull String password) {}

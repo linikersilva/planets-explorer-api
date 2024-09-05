@@ -35,7 +35,9 @@ public class WebSecurityConfig {
 
     protected static final String [] ENDPOINTS_WITH_ADMIN_ACCESS_LEVEL = {
             "/users",
-            "/users/update/{id}"
+            "/users/update/{id}",
+            "/planets",
+            "/planets/update/{id}"
     };
 
     @Bean

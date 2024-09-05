@@ -40,9 +40,17 @@ public class Planet {
     public Planet() {
     }
 
-    public Planet(Integer width, Integer height) {
+    public Planet(String name, Integer width, Integer height,
+                  Integer maximumOccupancy, User creator,
+                  LocalDateTime createdAt, LocalDateTime updatedAt, User updater) {
+        this.name = name;
         this.width = width;
         this.height = height;
+        this.maximumOccupancy = maximumOccupancy;
+        this.creator = creator;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.updater = updater;
     }
 
     public Integer getId() {
@@ -63,6 +71,42 @@ public class Planet {
 
     public Integer getMaximumOccupancy() {
         return maximumOccupancy;
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    public void setMaximumOccupancy(Integer maximumOccupancy) {
+        this.maximumOccupancy = maximumOccupancy;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public void setUpdater(User updater) {
+        this.updater = updater;
     }
 
     public boolean isValidMaximumOccupancy(Integer newMaximumOccupancy) {

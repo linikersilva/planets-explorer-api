@@ -1,13 +1,12 @@
 package org.example.planetsexplorer.controller;
 
+import jakarta.validation.Valid;
 import org.example.planetsexplorer.domain.service.UserService;
-import org.example.planetsexplorer.shared.dto.CreateUserDto;
-import org.example.planetsexplorer.shared.dto.LoginUserDto;
-import org.example.planetsexplorer.shared.dto.RecoveryJwtTokenDto;
-import org.example.planetsexplorer.shared.dto.UserResponseDto;
+import org.example.planetsexplorer.shared.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -25,14 +24,15 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<RecoveryJwtTokenDto> authenticateUser(@RequestBody LoginUserDto loginUserDto) {
+    public ResponseEntity<RecoveryJwtTokenDto> authenticateUser(@RequestBody @Valid LoginUserDto loginUserDto) {
         RecoveryJwtTokenDto token = userService.authenticateUser(loginUserDto);
         return ResponseEntity.ok().body(token);
     }
 
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@AuthenticationPrincipal String userDetails,
-                                                      @RequestBody CreateUserDto createUserDto) {
+                                                      @RequestBody @Validated(BeanValidationCreationGroup.class)
+                                                      CreateUserDto createUserDto) {
         UserResponseDto user = userService.createUser(createUserDto, userDetails);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(user.id()).toUri();
@@ -42,7 +42,8 @@ public class UserController {
     @PatchMapping("/update/{id}")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable Integer id,
                                                       @AuthenticationPrincipal String userDetails,
-                                                      @RequestBody CreateUserDto createUserDto) {
+                                                      @RequestBody @Validated(BeanValidationUpdateGroup.class)
+                                                      CreateUserDto createUserDto) {
         UserResponseDto updatedUser = userService.updateUser(id, createUserDto, userDetails);
         return ResponseEntity.ok().body(updatedUser);
     }
