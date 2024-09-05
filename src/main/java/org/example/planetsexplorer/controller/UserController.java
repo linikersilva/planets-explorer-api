@@ -4,10 +4,14 @@ import org.example.planetsexplorer.domain.service.UserService;
 import org.example.planetsexplorer.shared.dto.CreateUserDto;
 import org.example.planetsexplorer.shared.dto.LoginUserDto;
 import org.example.planetsexplorer.shared.dto.RecoveryJwtTokenDto;
+import org.example.planetsexplorer.shared.dto.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/users")
@@ -23,28 +27,24 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<RecoveryJwtTokenDto> authenticateUser(@RequestBody LoginUserDto loginUserDto) {
         RecoveryJwtTokenDto token = userService.authenticateUser(loginUserDto);
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        return ResponseEntity.ok().body(token);
     }
 
     @PostMapping
-    public ResponseEntity<Void> createUser(@RequestBody CreateUserDto createUserDto) {
-        userService.createUser(createUserDto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<UserResponseDto> createUser(@AuthenticationPrincipal String userDetails,
+                                                      @RequestBody CreateUserDto createUserDto) {
+        UserResponseDto user = userService.createUser(createUserDto, userDetails);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(user.id()).toUri();
+        return ResponseEntity.created(uri).body(user);
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<String> getAuthenticationTest() {
-        return new ResponseEntity<>("Autenticado com sucesso", HttpStatus.OK);
-    }
-
-    @GetMapping("/test/customer")
-    public ResponseEntity<String> getCustomerAuthenticationTest() {
-        return new ResponseEntity<>("Cliente autenticado com sucesso", HttpStatus.OK);
-    }
-
-    @GetMapping("/test/administrator")
-    public ResponseEntity<String> getAdminAuthenticationTest() {
-        return new ResponseEntity<>("Administrador autenticado com sucesso", HttpStatus.OK);
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Integer id,
+                                                      @AuthenticationPrincipal String userDetails,
+                                                      @RequestBody CreateUserDto createUserDto) {
+        UserResponseDto updatedUser = userService.updateUser(id, createUserDto, userDetails);
+        return ResponseEntity.ok().body(updatedUser);
     }
 
 }

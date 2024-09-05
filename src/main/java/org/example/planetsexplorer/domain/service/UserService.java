@@ -10,11 +10,13 @@ import org.example.planetsexplorer.domain.repository.UserRepository;
 import org.example.planetsexplorer.shared.dto.CreateUserDto;
 import org.example.planetsexplorer.shared.dto.LoginUserDto;
 import org.example.planetsexplorer.shared.dto.RecoveryJwtTokenDto;
+import org.example.planetsexplorer.shared.dto.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -53,24 +55,69 @@ public class UserService {
                                        jwtTokenService.getExpiresAtFromToken(token));
     }
 
-    public void createUser(CreateUserDto createUserDto) {
+    @Transactional
+    public UserResponseDto createUser(CreateUserDto createUserDto, String userDetails) {
         Role role = roleService.findRoleById(createUserDto.roleId());
 
-        User creator = userRepository.findById(createUserDto.creatorId())
+        User creator = userRepository.findByEmail(userDetails)
                 .orElseThrow(() -> new EntityNotFoundException("Não foi encontrado nenhum usuário com o creatorId informado"));
 
         User newUser = new User(createUserDto.email(),
-                                securityConfiguration.passwordEncoder().encode(createUserDto.password()),
+                                encryptUserPassword(createUserDto.password()),
                                 role,
-                                creator,
+                                creator.getId(),
                                 LocalDateTime.now(),
                                 LocalDateTime.now(),
-                                creator);
+                                creator.getId());
 
-        userRepository.save(newUser);
+        User user = userRepository.save(newUser);
+
+        return new UserResponseDto(user.getId(),
+                                   user.getEmail(),
+                                   "******",
+                                   role.getId(),
+                                   creator.getId(),
+                                   user.getCreatedAt(),
+                                   user.getUpdatedAt(),
+                                   creator.getId());
     }
 
+    private String encryptUserPassword(String password) {
+        return securityConfiguration.passwordEncoder().encode(password);
+    }
+
+    @Transactional(readOnly = true)
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    @Transactional
+    public UserResponseDto updateUser(Integer id, CreateUserDto createUserDto, String userDetails) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Não foi encontrado nenhum usuário com o id informado"));
+
+        User updater = userRepository.findByEmail(userDetails)
+                .orElseThrow(() -> new EntityNotFoundException("Não foi encontrado nenhum usuário com o updaterId informado"));
+
+        Optional.ofNullable(createUserDto.email()).ifPresent(user::setEmail);
+        Optional.ofNullable(createUserDto.password()).ifPresent(password -> user.setPassword(encryptUserPassword(password)));
+        Optional.ofNullable(createUserDto.roleId()).ifPresent(roleId -> {
+            Role role = roleService.findRoleById(createUserDto.roleId());
+            user.setRole(role);
+        });
+
+        user.setUpdaterId(updater.getId());
+        user.setUpdatedAt(LocalDateTime.now());
+
+        userRepository.save(user);
+
+        return new UserResponseDto(user.getId(),
+                                   user.getEmail(),
+                                   "******",
+                                   user.getRoleId(),
+                                   user.getCreatorId(),
+                                   user.getCreatedAt(),
+                                   user.getUpdatedAt(),
+                                   updater.getId());
     }
 }

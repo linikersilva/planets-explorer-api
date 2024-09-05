@@ -26,21 +26,16 @@ public class WebSecurityConfig {
     }
 
     protected static final String [] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
-            "/users/login",
-            "/users"
+            "/users/login"
     };
 
     protected static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
-            "/users/test",
             "/space-probes/move"
     };
 
-    protected static final String [] ENDPOINTS_CUSTOMER = {
-            "/users/test/customer"
-    };
-
-    protected static final String [] ENDPOINTS_ADMIN = {
-            "/users/test/administrator"
+    protected static final String [] ENDPOINTS_WITH_ADMIN_ACCESS_LEVEL = {
+            "/users",
+            "/users/update/{id}"
     };
 
     @Bean
@@ -52,8 +47,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
                         .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
-                        .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMIN")
-                        .requestMatchers(ENDPOINTS_CUSTOMER).hasRole("BASIC")
+                        .requestMatchers(ENDPOINTS_WITH_ADMIN_ACCESS_LEVEL).hasRole("ADMIN")
                         .anyRequest().denyAll())
                 .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

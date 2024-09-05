@@ -25,8 +25,14 @@ public class Role {
     public Role() {
     }
 
-    public Role(RoleName name) {
+    public Role(RoleName name, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.name = name;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public RoleName getName() {

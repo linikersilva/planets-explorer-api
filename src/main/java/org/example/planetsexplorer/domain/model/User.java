@@ -22,9 +22,8 @@ public class User {
     @JoinColumn(name = "tipo_de_acesso_fk", nullable = false)
     private Role role;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_criador", nullable = false)
-    private User creator;
+    @Column(name = "usuario_criador", nullable = false)
+    private Integer creatorId;
 
     @Column(name = "data_de_criacao", nullable = false)
     private LocalDateTime createdAt;
@@ -32,9 +31,8 @@ public class User {
     @Column(name = "data_de_atualizacao", nullable = false)
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ultimo_usuario_que_atualizou", nullable = false)
-    private User updater;
+    @Column(name = "ultimo_usuario_que_atualizou", nullable = false)
+    private Integer updaterId;
 
     public User() {
     }
@@ -42,17 +40,17 @@ public class User {
     public User(String email,
                 String password,
                 Role role,
-                User creator,
+                Integer creatorId,
                 LocalDateTime createdAt,
                 LocalDateTime updatedAt,
-                User updater) {
+                Integer updaterId) {
         this.email = email;
         this.password = password;
         this.role = role;
-        this.creator = creator;
+        this.creatorId = creatorId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.updater = updater;
+        this.updaterId = updaterId;
     }
 
     public Integer getId() {
@@ -67,8 +65,44 @@ public class User {
         return password;
     }
 
+    public Integer getRoleId() {
+        return role.getId();
+    }
+
     public String getRoleName() {
         return role.getName().name();
+    }
+
+    public Integer getCreatorId() {
+        return creatorId;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public void setUpdaterId(Integer updaterId) {
+        this.updaterId = updaterId;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public boolean isOwnerOf(SpaceProbe spaceProbe) {
