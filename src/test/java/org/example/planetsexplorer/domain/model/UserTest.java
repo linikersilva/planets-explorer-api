@@ -20,13 +20,14 @@ class UserTest {
         role.setName(RoleName.ROLE_BASIC);
         user = new User("user@example.com", "password123",
                         role, 1, LocalDateTime.now(), LocalDateTime.now(), 1);
+        user.setId(1);
         spaceProbe = new SpaceProbe();
         spaceProbe.setOwner(user);
     }
 
     @Test
     void isOwnerOfShouldReturnTrueWhenUserIsSpaceProbeOwner() {
-        assertEquals(user.getId(), spaceProbe.getOwnerId());
+        assertTrue(user.isOwnerOf(spaceProbe));
     }
 
     @Test
@@ -34,16 +35,16 @@ class UserTest {
         User newOwner = new User();
         newOwner.setId(999);
         spaceProbe.setOwner(newOwner);
-        assertNotEquals(user.getId(), spaceProbe.getOwnerId());
+        assertFalse(user.isOwnerOf(spaceProbe));
     }
 
     @Test
     void hasRoleShouldReturnTrueWhenUserHasRole() {
-        assertEquals(user.getRoleName(), RoleName.ROLE_BASIC.name());
+        assertTrue(user.hasRole(RoleName.ROLE_BASIC));
     }
 
     @Test
     void hasRoleShouldReturnFalseWhenUserDoesNotHaveRole() {
-        assertNotEquals(user.getRoleName(), RoleName.ROLE_ADMIN.name());
+        assertFalse(user.hasRole(RoleName.ROLE_ADMIN));
     }
 }
