@@ -69,7 +69,6 @@ Se você precisar interagir diretamente com o banco de dados localmente, você p
 
     ```bash
     git clone https://github.com/linikersilva/planets-explorer-api.git
-    cd planets-explorer-api
     ```
 
 2. **Entre na pasta do projeto:**
@@ -87,8 +86,12 @@ Se você precisar interagir diretamente com o banco de dados localmente, você p
    Isso irá construir e iniciar os contêineres definidos no arquivo `docker-compose.yml`.
 
 
-4. **Com o projeto rodando, crie seu usuário no endpoint **_POST /users_**.  Informe o seguinte payload na request (mudando seu email e senha):**
+4. **Importe a Collection dessa API no Postman:**
   
+       https://elements.getpostman.com/redirect?entityId=16737360-a90c29cd-dbc6-40ac-a121-1ad61cee666f&entityType=collection
+
+5. **Com o projeto rodando, crie seu usuário no endpoint **_POST /users_**.  Informe o seguinte payload na request (mudando seu email e senha):**
+
        { 
            "email": "seuemail@gmail.com",
            "password": "suasenha",
@@ -96,7 +99,7 @@ Se você precisar interagir diretamente com o banco de dados localmente, você p
            "creatorId": 1
        }
 
-5. **Agora, efetue login com o email e senha desse usuário criado no endpoint **_POST /users/login_**. Informe o seguinte payload na request (mudando seu email e senha):**
+6. **Agora, efetue login com o email e senha desse usuário criado no endpoint **_POST /users/login_**. Informe o seguinte payload na request (mudando seu email e senha):**
 
        {
            "email": "seuemail@gmail.com",
