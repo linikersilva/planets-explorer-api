@@ -85,6 +85,10 @@ public class Planet {
         return updatedAt;
     }
 
+    public User getUpdater() {
+        return updater;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -103,6 +107,14 @@ public class Planet {
 
     public void setMaximumOccupancy(Integer maximumOccupancy) {
         this.maximumOccupancy = maximumOccupancy;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
