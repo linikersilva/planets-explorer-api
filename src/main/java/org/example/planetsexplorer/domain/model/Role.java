@@ -42,4 +42,8 @@ public class Role {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    public void setName(RoleName name) {
+        this.name = name;
+    }
 }

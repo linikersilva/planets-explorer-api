@@ -111,6 +111,10 @@ public class SpaceProbe {
         return updater.getId();
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public void setX(Integer x) {
         this.x = x;
     }
@@ -127,8 +131,16 @@ public class SpaceProbe {
         this.currentPlanet = currentPlanet;
     }
 
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {

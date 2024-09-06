@@ -168,7 +168,9 @@ public class SpaceProbeService {
                     .orElseThrow(() -> new EntityNotFoundException("Não foi encontrado nenhum planeta com o id informado"));
         }
 
-        SpaceProbeDirectionEnum.checkIfDirectionExists(createSpaceProbeDto.directionId());
+        if (createSpaceProbeDto.directionId() != null) {
+            SpaceProbeDirectionEnum.checkIfDirectionExists(createSpaceProbeDto.directionId());
+        }
 
         User owner = creator;
         if (createSpaceProbeDto.ownerId() != null) {
@@ -204,7 +206,7 @@ public class SpaceProbeService {
                                          spaceProbe.getX(),
                                          spaceProbe.getY(),
                                          formatNameWithId(getDirectionName(spaceProbe),
-                                                          spaceProbe.getId()),
+                                                          spaceProbe.getDirection()),
                                          getCurrentPlanetName(spaceProbe.getCurrentPlanet()),
                                          spaceProbe.getOwnerId(),
                                          creator.getId(),
@@ -226,7 +228,7 @@ public class SpaceProbeService {
     private String getCurrentPlanetName(Planet currentPlanet) {
         return currentPlanet != null
                 ? formatNameWithId(currentPlanet.getName(),
-                currentPlanet.getId())
+                                   currentPlanet.getId())
                 : null;
     }
 
